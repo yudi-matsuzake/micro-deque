@@ -12,12 +12,6 @@ _______
 |MACROS
 ------- */
 
-/* _DEQUE_DEF_ */
-//macro to assist in create the condition to not include or define twice the same structure
-#ifndef _DEQUE_DEF_
-	#define _DEQUE_DEF_ (X, Y) _ # X # _ # Y # _
-#endif
-
 /* _DEQUE_TYPE_ */
 //holds the type of the struct
 #ifndef _DEQUE_TYPE_
@@ -35,13 +29,21 @@ ___________________________________________
 -------------------------------------------
 */
 
+/* DEQUE */
+
 /*auxx*/
+//deque
 #define DDDEQUE_FUNC(X, Y) X ## _ ## Y
 #define DDEQUE_FUNC(X, Y) DDDEQUE_FUNC(X, Y)
 #define DEQUE_FUNC(X) DDEQUE_FUNC(_DEQUE_NAME_, X)
+//deque node
+#define DDDEQUE_NODE_FUNC(X, Y) X ## _node_ ## Y
+#define DDEQUE_NODE_FUNC(X, Y) DDDEQUE_NODE_FUNC(X, Y)
+#define DEQUE_NODE_FUNC(X) DDEQUE_NODE_FUNC(_DEQUE_NAME_, X)
+
 
 /*struct*/
-#define DEQUE_STRUCT_NODE DDEQUE_FUNC(_DEQUE_NAME_, _node_t)
+#define DEQUE_STRUCT_NODE DDEQUE_FUNC(_DEQUE_NAME_, node_t)
 #define DEQUE_STRUCT DDEQUE_FUNC(_DEQUE_NAME_, t)
 
 /*functions*/
@@ -70,6 +72,11 @@ ___________________________________________
 //push
 #define DEQUE_PUSH DEQUE_FUNC(push)
 
+//print
+#define DEQUE_PRINT DEQUE_FUNC(print)
+
+/* DEQUE NODE */
+#define DEQUE_NODE_CREATE DEQUE_NODE_FUNC(create)
 
 /*-----------------------------------------------------------------------------------------
 _________
@@ -99,47 +106,67 @@ typedef struct DEQUE_STRUCT {
 	
 	unsigned long int size;
 } DEQUE_STRUCT ;
-/*-----------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------
+______________________________
+| DEQUE_STRUCT_NODE FUNCTIONS |
+------------------------------
+*/
 
-//create node
-//_deque_name__node_t* _deque_name__create_node(dtype data){
-//	_deque_ame__node_t* newnode = (_deque_name__node_t*) malloc(sizeof(_deque_name__node_t));
-//	newnode->prev = newnode->next = NULL;
-//	newnode->data = data;
-//	return newnode;
-//}
-////constructor and destructor
-//STR(_deque_name_)_t* STR(_deque_name_)_create(){
-//	STR(_deque_name_)_t* D = NULL;
-//	D = (STR(_deque_name_)_t*) malloc(sizeof(STR(_deque_name_)_t));
-//
-//	if(D) D->size = (unsigned long int) (D->first = D->last = NULL);
-//	
-//	return D;
-//}
+/* DEQUE_NODE_CREATE */
+DEQUE_STRUCT_NODE* DEQUE_NODE_CREATE (dtype data){
+	DEQUE_STRUCT_NODE* newnode = (DEQUE_STRUCT_NODE*) malloc(sizeof(DEQUE_STRUCT_NODE));
+	newnode->prev = newnode->next = NULL;
+	newnode->data = data;
+	return newnode;
+}
 
-//void _deque_destroy(deque_t* D){
-//	dequenode_t* i = D->first;
-//	
-//	if(i!=NULL)
-//	do{
-//		free(i);
-//	}while (i != D->last && i!=NULL);
-//
-//	free(D);
-//}
-//
-////modificators
-//void _deque_append(deque_t* D, dtype data){
-//	dequenode_t* newnode = create_node(data);
-//
-//	if(D->first == NULL){
-//		D->first = D->last = newnode;
-//		newnode->next = newnode->prev = newnode;
-//	}else{
-//		D->last->next = newnode;
-//		D->last = newnode;
-//	}
-//	D->size++;
-//}
+/*-------------------------------------------------------------------------------------------
+_________________________
+| DEQUE_STRUCT FUNCTIONS |
+--------------------------
+*/
+
+
+/*CONSTRUCTOR AND DESTRUCTOR*/
+//DEQUE_CREATE
+DEQUE_STRUCT* DEQUE_CREATE(){
+	DEQUE_STRUCT* D = NULL;
+	D = (DEQUE_STRUCT*) malloc(sizeof(DEQUE_STRUCT));
+
+	if(D) D->size = (unsigned long int) (D->first = D->last = NULL);
+	
+	return D;
+}
+
+//DEQUE_DESTROY
+void DEQUE_DESTROY( DEQUE_STRUCT* D){
+	DEQUE_STRUCT_NODE * i;
+	
+	for(i = D->first; i!=NULL; i=i->next)
+		free(i);
+	
+	free(D);
+}
+
+/*MODIFICATORS*/
+void DEQUE_ENQUEUE( DEQUE_STRUCT* D, dtype data) {
+	DEQUE_STRUCT_NODE* newnode = DEQUE_NODE_CREATE(data);
+
+	if(D->first == NULL){
+		D->first = D->last = newnode;
+		newnode->next = newnode->prev = newnode;
+	}else{
+		D->last->next = newnode;
+		D->last = newnode;
+	}
+	D->size++;
+}
+
+/*OPERATIONS*/
+void DEQUE_PRINT(DEQUE_STRUCT* D, void(print_elem)( dtype )) {
+	DEQUE_STRUCT_NODE* i;
+	for ( i=D->first ; i!=NULL; i=i->next){
+		print_elem(i->data);
+	}
+}
 

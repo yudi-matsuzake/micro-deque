@@ -1,16 +1,22 @@
 DONE:
-
-	* Compiled and deque_t HAS BEEN INSTANTIATED WITH SUCCESS!!!!!
-	* MACROS WORKING (SORT OF)
-	* Despite of my exciting this is a very, very basic commit
+	* Inserting and printing
 
 TODO:
-	[  ] STRUCTURE
-		[  ] STACK
-			[  ] PUSH
-			[  ] POP
-		[  ] QUEUE
-			[  ] ENQUEUE
-			[  ] DEQUEUE
-	[  ] Atributos
+	* undef the macros for re-include the deque.h
+
+	[   ] STRUCTURE
+		[   ] DESTRUCTOR
+			[   ] FUNCTION PASSED BY ARGUMENT
+			[ x ] FREE THE BOXES/CONTAINERS
+		[   ] STACK
+			[   ] PUSH
+			[   ] POP
+		[   ] QUEUE
+			[ x ] ENQUEUE
+			[   ] DEQUEUE
+	[   ] ATTRIBUTES
+
+	[   ] OPERATIONS
+		[ x ] PRINT
+			[ x ] FUNCTION PASSED BY ARGUMENT
 
