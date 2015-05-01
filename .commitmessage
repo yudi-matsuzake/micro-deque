@@ -1,0 +1,16 @@
+DONE:
+
+	* Compiled and deque_t HAS BEEN INSTANTIATED WITH SUCCESS!!!!!
+	* MACROS WORKING (SORT OF)
+	* Despite of my exciting this is a very, very basic commit
+
+TODO:
+	[  ] STRUCTURE
+		[  ] STACK
+			[  ] PUSH
+			[  ] POP
+		[  ] QUEUE
+			[  ] ENQUEUE
+			[  ] DEQUEUE
+	[  ] Atributos
+
