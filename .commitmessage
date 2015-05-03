@@ -1,5 +1,6 @@
 DONE:
 	* Inserting and printing
+	* Undefines (double statement protection not done yet)
 
 TODO:
 	* undef the macros for re-include the deque.h

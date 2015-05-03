@@ -86,7 +86,7 @@ _________
 #include <stdlib.h>
 /*-----------------------------------------------------------------------------------------*/
 
-typedef _DEQUE_TYPE_ dtype; //dtype it's the type of all this full generic crazyness
+#define dtype _DEQUE_TYPE_ //dtype it's the type of all this full generic crazyness
 
 /*-----------------------------------------------------------------------------------------
 __________
@@ -140,10 +140,13 @@ DEQUE_STRUCT* DEQUE_CREATE(){
 
 //DEQUE_DESTROY
 void DEQUE_DESTROY( DEQUE_STRUCT* D){
-	DEQUE_STRUCT_NODE * i;
-	
-	for(i = D->first; i!=NULL; i=i->next)
+	DEQUE_STRUCT_NODE * i = D->first;
+
+	while ( i != NULL ){
+		DEQUE_STRUCT_NODE* next = i->next;
 		free(i);
+		i = next;
+	}
 	
 	free(D);
 }
@@ -170,3 +173,59 @@ void DEQUE_PRINT(DEQUE_STRUCT* D, void(print_elem)( dtype )) {
 	}
 }
 
+/*-----------------------------------------------------------------------------------------
+__________
+|UNDEFINES
+----------
+*/
+
+#undef _DEQUE_NAME_
+#undef _DEQUE_NAME_
+
+#undef dtype
+/*auxx*/
+//deque
+#undef DDDEQUE_FUNC
+#undef DDEQUE_FUNC
+#undef DEQUE_FUNC
+//deque node
+#undef DDDEQUE_NODE_FUNC
+#undef DDEQUE_NODE_FUNC
+#undef DEQUE_NODE_FUNC
+
+
+/*struct*/
+#undef DEQUE_STRUCT_NODE
+#undef DEQUE_STRUCT
+
+/*functions*/
+
+//create
+#undef DEQUE_CREATE
+
+//destroy
+#undef DEQUE_DESTROY
+
+//size
+#undef DEQUE_SIZE
+
+//is_empty
+#undef DEQUE_IS_EMPTY
+
+//enqueue
+#undef DEQUE_ENQUEUE
+
+//unqueue
+#undef DEQUE_UNQUEUE
+
+//pop
+#undef DEQUE_POP
+
+//push
+#undef DEQUE_PUSH
+
+//print
+#undef DEQUE_PRINT
+
+/* DEQUE NODE */
+#undef DEQUE_NODE_CREATE
