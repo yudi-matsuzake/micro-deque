@@ -13,15 +13,22 @@ _______
 ------- */
 
 /* _DEQUE_TYPE_ */
+
+#define XPAND(X) X
+
+/*========================DONT WORKING===========================*/
+/*This should avoid the reinclude with the same _DEQUE_NAME_ */
+#if XPAND(_DEQUE_NAME_) == 0
+//holds the name, i.e., the name of the struct that you'll use. This must to be unique
+#ifndef _DEQUE_NAME_
+	#define _DEQUE_NAME_ deque
+#endif
+
 //holds the type of the struct
 #ifndef _DEQUE_TYPE_
 	#define _DEQUE_TYPE_ void*
 #endif
 
-//holds the name, i.e., the name of the struct that you'll use. This must to be unique
-#ifndef _DEQUE_NAME_
-	#define _DEQUE_NAME_ deque
-#endif
 
 /*-----------------------------------------------------------------------------------------
 ___________________________________________
@@ -139,11 +146,13 @@ DEQUE_STRUCT* DEQUE_CREATE(){
 }
 
 //DEQUE_DESTROY
-void DEQUE_DESTROY( DEQUE_STRUCT* D){
+void DEQUE_DESTROY( DEQUE_STRUCT* D, void (free_elem)( dtype) ){
 	DEQUE_STRUCT_NODE * i = D->first;
 
 	while ( i != NULL ){
 		DEQUE_STRUCT_NODE* next = i->next;
+		if ( free_elem != NULL)
+			free_elem(i->data);
 		free(i);
 		i = next;
 	}
@@ -179,8 +188,6 @@ __________
 ----------
 */
 
-#undef _DEQUE_NAME_
-#undef _DEQUE_NAME_
 
 #undef dtype
 /*auxx*/
@@ -229,3 +236,10 @@ __________
 
 /* DEQUE NODE */
 #undef DEQUE_NODE_CREATE
+
+#undef _DEQUE_TYPE_
+#undef _DEQUE_NAME_
+
+#endif
+
+#undef XPAND
