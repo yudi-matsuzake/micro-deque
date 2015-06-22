@@ -15,7 +15,7 @@ TODO:
 			[   ] POP
 		[   ] QUEUE
 			[ x ] ENQUEUE
-			[   ] DEQUEUE
+			[ x ] DEQUEUE
 	[   ] ATTRIBUTES
 
 	[   ] OPERATIONS
