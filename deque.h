@@ -16,7 +16,7 @@ _______
 
 #define XPAND(X) X
 
-/*========================DONT WORKING===========================*/
+/*=========================FIX ME================================*/
 /*This should avoid the reinclude with the same _DEQUE_NAME_ */
 #if XPAND(_DEQUE_NAME_) == 0
 //holds the name, i.e., the name of the struct that you'll use. This must to be unique
@@ -70,8 +70,8 @@ ___________________________________________
 //enqueue
 #define DEQUE_ENQUEUE DEQUE_FUNC(enqueue)
 
-//unqueue
-#define DEQUE_UNQUEUE DEQUE_FUNC(unqueue)
+//dequeue
+#define DEQUE_DEQUEUE DEQUE_FUNC(dequeue)
 
 //pop
 #define DEQUE_POP DEQUE_FUNC(pop)
@@ -91,6 +91,7 @@ _________
 ----------
 */
 #include <stdlib.h>
+#include "boolean.h"
 /*-----------------------------------------------------------------------------------------*/
 
 #define dtype _DEQUE_TYPE_ //dtype it's the type of all this full generic crazyness
@@ -100,6 +101,7 @@ __________
 |STRUCTURE
 ----------
 */
+
 typedef struct DEQUE_STRUCT_NODE {
 	struct DEQUE_STRUCT_NODE * next;
 	struct DEQUE_STRUCT_NODE * prev;
@@ -113,6 +115,14 @@ typedef struct DEQUE_STRUCT {
 	
 	unsigned long int size;
 } DEQUE_STRUCT ;
+/*-----------------------------------------------------------------------------------------
+____________
+|DEFINITIONS
+------------
+*/
+
+boolean DEQUE_IS_EMPTY ( DEQUE_STRUCT * D);
+
 /*-----------------------------------------------------------------------------------------
 ______________________________
 | DEQUE_STRUCT_NODE FUNCTIONS |
@@ -166,12 +176,37 @@ void DEQUE_ENQUEUE( DEQUE_STRUCT* D, dtype data) {
 
 	if(D->first == NULL){
 		D->first = D->last = newnode;
-		newnode->next = newnode->prev = newnode;
 	}else{
 		D->last->next = newnode;
 		D->last = newnode;
 	}
 	D->size++;
+}
+
+//DEQUE_DEQUEUE
+//returns true or false whether was possible removes the first element
+boolean DEQUE_DEQUEUE( DEQUE_STRUCT* D, dtype* dequeued){
+	if ( DEQUE_IS_EMPTY( D ) ){
+		return false;
+	}
+	
+	(*dequeued) = D->first->data;
+	
+	DEQUE_STRUCT_NODE* old_box = D->first;
+
+	D->first = old_box->next;
+	
+	if( D->size == 1 )
+		D->last = D->first;
+	
+	D->size--;
+	free(old_box);
+	return true;
+}
+
+/*ATRIBUTES*/
+boolean DEQUE_IS_EMPTY( DEQUE_STRUCT* D){
+	return (D->size <= 0)?true:false;
 }
 
 /*OPERATIONS*/
@@ -223,7 +258,7 @@ __________
 #undef DEQUE_ENQUEUE
 
 //unqueue
-#undef DEQUE_UNQUEUE
+#undef DEQUE_DEQUEUE
 
 //pop
 #undef DEQUE_POP

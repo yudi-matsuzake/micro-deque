@@ -1,10 +1,14 @@
-all: ex0 ex1 ex2 ex3
+all: exs
 
-ex0:	../deque.h ex0.c
-	gcc ex0.c -o ex0.out -I..
-ex1:	../deque.h ex1.c
-	gcc ex1.c -o ex1.out -I..
-ex2:	../deque.h ex2.c
-	gcc ex2.c -o ex2.out -I..
-ex3:	../deque.h ex3.c
-	gcc ex3.c -o ex3.out -I..
+exs:	../deque.h ex*.c
+	@for i in ex*.c ; \
+	do \
+		echo gcc "$$i" -o "$${i%.c}.out" -I.. ; \
+		gcc "$$i" -o "$${i%.c}.out" -I.. ; \
+	done ; \
+
+% :
+	@if [ $@ != "all" ] ; \
+	then \
+		gcc $@.c -o $@.out -I.. ; \
+	fi ;
