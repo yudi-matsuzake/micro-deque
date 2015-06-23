@@ -14,11 +14,6 @@ _______
 
 /* _DEQUE_TYPE_ */
 
-#define XPAND(X) X
-
-/*=========================FIX ME================================*/
-/*This should avoid the reinclude with the same _DEQUE_NAME_ */
-#if XPAND(_DEQUE_NAME_) == 0
 //holds the name, i.e., the name of the struct that you'll use. This must to be unique
 #ifndef _DEQUE_NAME_
 	#define _DEQUE_NAME_ deque
@@ -29,6 +24,11 @@ _______
 	#define _DEQUE_TYPE_ void*
 #endif
 
+
+#define XPAND(X) X
+
+/*This should avoid the reinclude with the same _DEQUE_NAME_ */
+#if XPAND(_DEQUE_NAME_) == 0
 
 /*-----------------------------------------------------------------------------------------
 ___________________________________________
@@ -275,6 +275,6 @@ __________
 #undef _DEQUE_TYPE_
 #undef _DEQUE_NAME_
 
-#endif
+#endif //if XPAND(X)
 
 #undef XPAND
