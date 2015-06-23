@@ -1,14 +1,12 @@
 DONE:
-	* Inserting and printing
-	* Undefines (double statement protection not done yet)
-	* Examples added on README and folder
+	* deque_size function created
+	* update this file
 
 TODO:
-	* undef the macros for re-include the deque.h
 
 	[   ] STRUCTURE
-		[   ] DESTRUCTOR
-			[   ] FUNCTION PASSED BY ARGUMENT
+		[ x ] DESTRUCTOR
+			[ x ] FUNCTION PASSED BY ARGUMENT
 			[ x ] FREE THE BOXES/CONTAINERS
 		[   ] STACK
 			[   ] PUSH
@@ -16,7 +14,9 @@ TODO:
 		[   ] QUEUE
 			[ x ] ENQUEUE
 			[ x ] DEQUEUE
-	[   ] ATTRIBUTES
+	[   ] ATTRIBUTES (maybe more?)
+		[ x ] IS_EMPTY
+		[ x ] SIZE
 
 	[   ] OPERATIONS
 		[ x ] PRINT

@@ -209,6 +209,10 @@ boolean DEQUE_IS_EMPTY( DEQUE_STRUCT* D){
 	return (D->size <= 0)?true:false;
 }
 
+unsigned long int DEQUE_SIZE(DEQUE_STRUCT* D){
+	return D->size;
+}
+
 /*OPERATIONS*/
 void DEQUE_PRINT(DEQUE_STRUCT* D, void(print_elem)( dtype )) {
 	DEQUE_STRUCT_NODE* i;
