@@ -24,12 +24,6 @@ _______
 	#define _DEQUE_TYPE_ void*
 #endif
 
-
-#define XPAND(X) X
-
-/*This should avoid the reinclude with the same _DEQUE_NAME_ */
-#if XPAND(_DEQUE_NAME_) == 0
-
 /*-----------------------------------------------------------------------------------------
 ___________________________________________
 |MACROS OF THE {FUNCTIONS,STRUCTURES} NAME
@@ -279,6 +273,3 @@ __________
 #undef _DEQUE_TYPE_
 #undef _DEQUE_NAME_
 
-#endif //if XPAND(X)
-
-#undef XPAND
