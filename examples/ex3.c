@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define _DEQUE_TYPE_ double
 #define _DEQUE_NAME_ double_deque

@@ -6,7 +6,6 @@
 *
 */
 
-
 /*
 _______
 |MACROS
@@ -41,7 +40,6 @@ ___________________________________________
 #define DDDEQUE_NODE_FUNC(X, Y) X ## _node_ ## Y
 #define DDEQUE_NODE_FUNC(X, Y) DDDEQUE_NODE_FUNC(X, Y)
 #define DEQUE_NODE_FUNC(X) DDEQUE_NODE_FUNC(_DEQUE_NAME_, X)
-
 
 /*struct*/
 #define DEQUE_STRUCT_NODE DDEQUE_FUNC(_DEQUE_NAME_, node_t)

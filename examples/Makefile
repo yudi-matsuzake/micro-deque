@@ -1,10 +1,10 @@
-all: exs
+all: exs 
 
 exs:	../deque.h ex*.c
 	@for i in ex*.c ; \
 	do \
-		echo gcc "$$i" -o "$${i%.c}.out" -I.. ; \
-		gcc "$$i" -o "$${i%.c}.out" -I.. ; \
+		echo clang "$$i" -o "$${i%.c}.out" -I.. ; \
+		clang "$$i" -o "$${i%.c}.out" -I.. ; \
 	done ; \
 
 % :
