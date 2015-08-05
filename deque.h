@@ -68,6 +68,12 @@ ___________________________________________
 //pop
 #define DEQUE_POP DEQUE_FUNC(pop)
 
+//pop_back
+#define DEQUE_POP_BACK DEQUE_FUNC(pop_back)
+
+//pop
+#define DEQUE_POP DEQUE_FUNC(pop)
+
 //push
 #define DEQUE_PUSH DEQUE_FUNC(push)
 
@@ -121,7 +127,7 @@ ______________________________
 ------------------------------
 */
 
-/* DEQUE_NODE_CREATE */
+/*DEQUE_NODE_CREATE*/
 DEQUE_STRUCT_NODE* DEQUE_NODE_CREATE (dtype data){
 	DEQUE_STRUCT_NODE* newnode = (DEQUE_STRUCT_NODE*) malloc(sizeof(DEQUE_STRUCT_NODE));
 	newnode->prev = newnode->next = NULL;
@@ -136,6 +142,7 @@ _________________________
 */
 
 
+/*===========================================================================*/
 /*CONSTRUCTOR AND DESTRUCTOR*/
 //DEQUE_CREATE
 DEQUE_STRUCT* DEQUE_CREATE(){
@@ -162,6 +169,7 @@ void DEQUE_DESTROY( DEQUE_STRUCT* D, void (free_elem)( dtype) ){
 	free(D);
 }
 
+/*===========================================================================*/
 /*MODIFICATORS*/
 void DEQUE_ENQUEUE( DEQUE_STRUCT* D, dtype data) {
 	DEQUE_STRUCT_NODE* newnode = DEQUE_NODE_CREATE(data);
@@ -169,6 +177,7 @@ void DEQUE_ENQUEUE( DEQUE_STRUCT* D, dtype data) {
 	if(D->first == NULL){
 		D->first = D->last = newnode;
 	}else{
+		newnode->prev = D->last;
 		D->last->next = newnode;
 		D->last = newnode;
 	}
@@ -196,6 +205,48 @@ boolean DEQUE_DEQUEUE( DEQUE_STRUCT* D, dtype* dequeued){
 	return true;
 }
 
+//DEQUE_POP
+//returns true or false whether was possible removes the first element
+boolean DEQUE_POP(DEQUE_STRUCT* D, dtype* poped){
+	return DEQUE_DEQUEUE(D, poped);
+}
+
+//DEQUE_POP_BACK
+boolean DEQUE_POP_BACK(DEQUE_STRUCT* D, dtype* poped){
+	if (DEQUE_IS_EMPTY(D)){
+		return false;
+	}
+
+	(*poped) = D->last->data;
+
+	DEQUE_STRUCT_NODE* old_box = D->last;
+
+	D->last = old_box->prev;
+
+	if(D->size == 1)
+		D->first = D->last;
+	
+	D->size--;
+	free(old_box);
+	return true;
+}
+
+//DEQUE_PUSH
+void DEQUE_PUSH(DEQUE_STRUCT* D, dtype data){
+	DEQUE_STRUCT_NODE* newnode = DEQUE_NODE_CREATE(data);
+
+	if(D->first == NULL){
+		D->first = D->last = newnode;
+	}else{
+		newnode->next = D->first;
+		D->first->prev = newnode;
+		D->first = newnode;
+	}
+
+	D->size++;
+}
+
+/*===========================================================================*/
 /*ATRIBUTES*/
 boolean DEQUE_IS_EMPTY( DEQUE_STRUCT* D){
 	return (D->size <= 0)?true:false;
@@ -205,6 +256,7 @@ unsigned long int DEQUE_SIZE(DEQUE_STRUCT* D){
 	return D->size;
 }
 
+/*===========================================================================*/
 /*OPERATIONS*/
 void DEQUE_PRINT(DEQUE_STRUCT* D, void(print_elem)( dtype )) {
 	DEQUE_STRUCT_NODE* i;

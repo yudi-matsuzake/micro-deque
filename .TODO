@@ -1,0 +1,26 @@
+DONE:
+	* This file are not the commit message anymore;
+	
+	* Trace this file and short commit messages become the standard of this project;
+
+TODO:
+
+	[ X ] STRUCTURE
+		[ x ] DESTRUCTOR
+			[ x ] FUNCTION PASSED BY ARGUMENT
+			[ x ] FREE THE BOXES/CONTAINERS
+		[ X ] STACK
+			[ X ] PUSH
+			[ X ] POP
+			[ X ] POP_BACK
+		[ x ] QUEUE
+			[ x ] ENQUEUE
+			[ x ] DEQUEUE
+	[   ] ATTRIBUTES (maybe more?)
+		[ x ] IS_EMPTY
+		[ x ] SIZE
+
+	[   ] OPERATIONS (maybe more?)
+		[ x ] PRINT
+			[ x ] FUNCTION PASSED BY ARGUMENT
+
