@@ -3,7 +3,15 @@ DONE:
 	
 	* Trace this file and short commit messages become the standard of this project;
 
+	* Test framework;
+
 TODO:
+	
+	[   ] EX5
+	
+	[ X ] TEST FRAMEWORK
+		[ X ] STRUCTURE
+		[ X ] VERIFY FUNCTIONS
 
 	[ X ] STRUCTURE
 		[ x ] DESTRUCTOR
@@ -23,4 +31,6 @@ TODO:
 	[   ] OPERATIONS (maybe more?)
 		[ x ] PRINT
 			[ x ] FUNCTION PASSED BY ARGUMENT
-
+		[   ] FOREACH
+		[   ] TO ARRAY
+	[   ] INSERT AN EXAMPLE OF ITERATION

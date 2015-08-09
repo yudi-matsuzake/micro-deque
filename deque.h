@@ -197,6 +197,9 @@ boolean DEQUE_DEQUEUE( DEQUE_STRUCT* D, dtype* dequeued){
 
 	D->first = old_box->next;
 	
+	if(D->first)
+		D->first->prev = NULL;
+
 	if( D->size == 1 )
 		D->last = D->first;
 	
@@ -222,6 +225,9 @@ boolean DEQUE_POP_BACK(DEQUE_STRUCT* D, dtype* poped){
 	DEQUE_STRUCT_NODE* old_box = D->last;
 
 	D->last = old_box->prev;
+	
+	if(D->last)
+		D->last->next = NULL;
 
 	if(D->size == 1)
 		D->first = D->last;
