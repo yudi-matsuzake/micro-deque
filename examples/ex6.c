@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define N_ELEM 1000000
+#define N_ELEM 100000
 #define N_TEST 20
 #define _DEQUE_TYPE_ int
 //when the _DEQUE_NAME_ is not defined, the default name is deque
@@ -65,7 +65,7 @@ typedef enum{
 }MOD;
 
 /*ERRORS-------------*/
-#define N_ERRORS 6
+#define N_ERRORS 7
 
 typedef enum{
 	ERROR_NO,
@@ -73,7 +73,8 @@ typedef enum{
 	ERROR_WRONG_LINK,
 	ERROR_MUST_BE_NULL,
 	ERROR_NULL_POINTER,
-	ERROR_SIZE_WRONG
+	ERROR_SIZE_WRONG,
+	ERROR_ON_REMOVING
 }ERROR;
 
 const char* error_messages[N_ERRORS] =
@@ -83,7 +84,8 @@ const char* error_messages[N_ERRORS] =
 	RED"Wrong link, next or prev element not found!"NORMAL,
 	RED"The deque begins and ends with a non-null-pointer, expected a null pointer in first or last position!"NORMAL,
 	RED"The deque or a node is a null pointer!"NORMAL,
-	RED"The size is wrong!"NORMAL
+	RED"The size is wrong!"NORMAL,
+	RED"Error on removing the element!"NORMAL,
 };
 
 
@@ -106,12 +108,12 @@ boolean (*out_functions[N_MOD_RE])(deque_t*, int*) = { deque_dequeue, deque_pop,
 void print_progress(int n, boolean is_inserting){
 	//show the progress
 	//mod... 00%
-	printf(BLUE "%s...%3.2lf%%\r"NORMAL, (double)(n+1)/(double)N_ELEM*100, //percentage
-	is_inserting?"inserting":"removing"); //mod
+	printf(BLUE "%s...%3.2lf%%\r"NORMAL, is_inserting?"inserting":"removing", //percentage
+	(double)(n+1)/(double)N_ELEM*100); //mod
 }
 
 //canonical inserting errors
-ERROR canonical_in(int n){
+ERROR canonical_in(size_t n){
 	if( D == NULL ) return ERROR_NULL_POINTER;
 	if( D->size != n+1 ) return ERROR_SIZE_WRONG;
 	if(n == 0 && ( !D->first || !D->last )) return ERROR_NULL_POINTER;
@@ -145,10 +147,9 @@ ERROR in_front(int n){
 ERROR in_back(int n){
 	ERROR canonical = canonical_in(n);
 	if(canonical) return canonical;
-	return ERROR_NO;
 
 	//The element is there?
-	if(D->last->data != vector[n]);
+	if(D->last->data != vector[n])
 		return ERROR_WRONG_ELEMENT;
 
 	//The links are right?
@@ -166,7 +167,7 @@ ERROR in_back(int n){
 }
 
 //canonical removing errors
-ERROR canonical_re(int n){
+ERROR canonical_re(size_t n){
 	if(D == NULL ) return ERROR_NULL_POINTER;
 	if(D->size != (N_ELEM-(n+1)) ) return ERROR_SIZE_WRONG;
 	if(n != (N_ELEM-1) && (!D->first || !D->last)) return ERROR_NULL_POINTER;
@@ -191,24 +192,26 @@ boolean link_front_check(int n, int from_deque){
 	return (from_deque == vector[n]);
 }
 
-ERROR re_front(int n, int removed, MOD in, MOD re){
+ERROR re_front(int n, int removed, MOD in){
 	ERROR canonical = canonical_re(n);
 	if(canonical) return canonical;
 	
 	//The element was removed right?
 	boolean (*elem_check)(int, int); //pointer to the check function
 	boolean (*link_check)(int, int);
+
+	
 	if( in == PUSH ){
-		elem_check = removed_front_check;
+		elem_check = removed_back_check;
 		link_check = link_back_check;
 	}
 	else // in == ENQUEUE
 	{
-		elem_check = removed_back_check;
+		elem_check = removed_front_check;
 		link_check = link_front_check;
 	}
 	
-	if(elem_check(n, removed))
+	if(!elem_check(n, removed))
 		return ERROR_WRONG_ELEMENT;
 
 	//Are the links right?
@@ -218,7 +221,7 @@ ERROR re_front(int n, int removed, MOD in, MOD re){
 	return ERROR_NO;
 }
 
-ERROR re_back(int n, int removed, MOD in, MOD re){
+ERROR re_back(int n, int removed, MOD in){
 	ERROR canonical = canonical_re(n);
 	if(canonical) return canonical;
 
@@ -227,16 +230,16 @@ ERROR re_back(int n, int removed, MOD in, MOD re){
 	boolean (*link_check)(int, int); //pointer to the check function
 
 	if( in == PUSH ){
-		elem_check = removed_back_check;
+		elem_check = removed_front_check;
 		link_check = link_front_check;
 	}
 	else // in == ENQUEUE
 	{
-		elem_check = removed_front_check;
+		elem_check = removed_back_check;
 		link_check = link_back_check;
 	}
 	
-	if(elem_check(n, removed))
+	if(!elem_check(n, removed))
 		return ERROR_WRONG_ELEMENT;
 
 	//Are the links right?
@@ -247,18 +250,20 @@ ERROR re_back(int n, int removed, MOD in, MOD re){
 }
 
 ERROR verify_in(int n, MOD mod){
-	if ( mod == PUSH )
-		return in_front(n);
-	return in_back(n);	
+	 return ( mod == PUSH )? in_front(n):in_back(n);	
 }
 
 ERROR verify_re(int n, int removed, MOD in, MOD re){
 	switch(re){
 		case DEQUEUE:
 		case POP:
-			return re_front(n, removed, in, re);
+			return re_front(n, removed, in);
+			break;
 		case POP_BACK:
-			return re_back(n, removed, in, re);
+			return re_back(n, removed, in);
+			break;
+		default:
+			return ERROR_NO;
 	}
 }
 
@@ -295,9 +300,11 @@ void test(MOD I, MOD R){
 
 		//removing...
 		int removed; //stores the removed element 
-		if(out_functions[R-N_MOD_IN](D, &removed))		
-		
-		ERR = verify_re(i, removed, I, R);
+		if(out_functions[R-N_MOD_IN](D, &removed))
+			ERR = verify_re(i, removed, I, R);
+		else
+			ERR = ERROR_ON_REMOVING;
+
 		if(ERR){
 			prints_err(ERR);
 
